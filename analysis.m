@@ -3,9 +3,12 @@ clear all; close all; clc
 %% Location and settings
 
 %Location and filename of the load cell data
-filePath = "D:\OneDrive - TU Eindhoven\VENI - Digital Fabrication with Concrete\04_Experiments\20240522_Preparation RILEM round4\Load cell\1";
-fileName = "DataLogger_1"; 
+filePath = "";
+fileName = ""; 
 fileExtension = ".csv";
+loggerType = "py"; %"py" refers to the OPC-UA logger in python https://github.com/arjendeetman/Python-OPC-UA or "ua" refers to the logger in UA Expert
+
+nozzleDiameter = 25; %mm
 
 %Set values for stable plateau detection
 %A moving standard deviation is applied with window size "k1". When the
@@ -15,17 +18,29 @@ fileExtension = ".csv";
 k1 = 10; %Window size
 lim1 = 0.05; %N
 
-interTime = 0.2; %seconds - When the time inbetween two stable measurments is larger than "interTime", the stable measurements belong to a different stable plateau.
+interTimeLimit = 0.2; %seconds - When the time inbetween two stable measurments is larger than "interTime", the stable measurements belong to a different stable plateau.
 minNo = 5; %Minimum number of stable measurements to select the stable plateau for further processing
 
+filterMethod = "medianDetection"; %removeOutliers or "medianDetection"
+%Setting for filterMethod median detection
+intervalLimit=0.7;
+
+plotting = true;
+
+%The limits below are only used for filterMethod "setLimits"
 
 
 %% Read file
 
 cd(filePath)
 T=readtable(fileName+fileExtension,'Delimiter',',');
-for j=1:height(T)
-    T2(j,1)=datetime(T.SourceTimeStamp{j},'InputFormat','yyyy-MM-dd''T''HH:mm:ss.SSSZ','TimeZone','UTC');
+if loggerType=="ua"
+    for j=1:height(T)
+        T2(j,1)=datetime(T.SourceTimeStamp{j},'InputFormat','yyyy-MM-dd''T''HH:mm:ss.SSSZ','TimeZone','UTC');
+    end
+elseif loggerType=="py"
+    T2=T.Time;
+    T.Value=T.Load;
 end
 
 %%
@@ -43,7 +58,7 @@ j=0;
 for i=2:length(Val2)
 %   diffDur(i-1)=seconds(Dur2(i)-Dur2(i-1));
     j=j+1;
-    if Dur2(i)-Dur2(i-1)>seconds(interTime)
+    if Dur2(i)-Dur2(i-1)>seconds(interTimeLimit)
         if j<minNo
             Val3{k}=0;
             Dur3{k}=NaT-NaT;
@@ -64,44 +79,85 @@ for i=2:length(Val2)
     Time3{k}(j)=Time2(i);
 end
 
-%TODO improve this methods. Instead of simply removing outliers, it could 
+interTime=firstTime(2:end)-lastTime(1:end-1);
+
+% TODO improve this methods. Instead of simply removing outliers, it could 
 % be based on thresholds. In practice it does, however, seem to work well 
 % since the outliers are located around bucket changes.
-[SlugMass, I]=rmoutliers(diff(meanSlug)'); 
-firstDur2a=firstDur(1:end-1);
-firstTime2a=firstTime(1:end-1);
-ContactTimeCorr=firstDur2a(~I)';
-ContactTime=firstTime2a(~I)';
+if filterMethod =="removeOutliers"
+    [SlugMass, I]=rmoutliers(diff(meanSlug)');
+    firstDur2a=firstDur(2:end);
+    firstTime2a=firstTime(2:end);
+    ContactTimeCorr=firstDur2a(~I)';
+    ContactTime=firstTime2a(~I)';
+    disp("Outliers removed: "+sum(I)+" of "+length(SlugMass))
+elseif filterMethod == "medianDetection"
+    SlugMassA=diff(meanSlug)';
+    SlugMassB=SlugMassA(interTime>(1-intervalLimit)*median(interTime)&interTime<(1+intervalLimit)*median(interTime));
+    SlugMass=SlugMassB(SlugMassB>0.1*median(SlugMassB));
+    % SlugMass=SlugMassA(interTime>0.3*mode(SlugMassA)&SlugMassA<1.7*mode(SlugMassA));
+
+    firstDur2a=firstDur(2:end);
+    firstTime2a=firstTime(2:end);
+    ContactTimeCorrA=firstDur2a(interTime>(1-intervalLimit)*median(interTime)&interTime<(1+intervalLimit)*median(interTime));
+    ContactTimeCorr=ContactTimeCorrA(SlugMassB>0.1*median(SlugMassB))';
+
+    ContactTimeA=firstTime2a(interTime>(1-intervalLimit)*median(interTime)&interTime<(1+intervalLimit)*median(interTime));
+    ContactTime=ContactTimeA(SlugMassB>0.1*median(SlugMassB))';
+end
+YieldStress=SlugMass/(sqrt(3)*1/4*pi*nozzleDiameter^2)*1000; %kPa
+disp("Sum "+sum(SlugMass)/9.81+" kg - "+length(SlugMass) +" slugs")
+ 
+% figure
+% plot(SlugMassA,'xk')
+% hold on
+% plot(SlugMassB,'xr')
 
 
 %%
-fig=figure;
-fig.Units='pixels';
-fig.Position=[1 500 1920 500];
-raw=plot(Dur,T.Value);
-hold on
-% xlim([minutes(1),minutes(2)])
-stable=plot(Dur2,Val2,'.r');
-firstDurPlot=plot(firstDur,meanSlug,'xg');
-lastDurPlot=plot(lastDur,meanSlug,'xb');
+if plotting == true
+    close all
 
-fig=figure;
-fig.Units='pixels';
-fig.Position=[1 250 1920 500];
-plot(firstDur2a,diff(meanSlug),'xk')
-hold on
-plot(ContactTimeCorr,SlugMass,'xr')
-ylabel('Mass [N]')
-disp("Outliers removed: "+sum(I)+" of "+length(SlugMass))
+    fig=figure;
+    fig.Units='pixels';
+    fig.Position=[1 500 1920 500];
+    raw=plot(Dur,T.Value);
+    hold on
+    % xlim([minutes(1),minutes(2)])
+    stable=plot(Dur2,Val2,'.r');
+    % firstDurPlot=plot(firstDur,meanSlug,'xg');
+    % lastDurPlot=plot(lastDur,meanSlug,'xb');
+    yyaxis right
+    hold on
+    pl=plot(ContactTimeCorr,SlugMass,'x','Color','m');
+    ax=gca;
+    ax.YAxis(2).Color='m';
 
-fig=figure;
-fig.Units='pixels';
-fig.Position=[1 1 1920 500];
-hold on
-plot(ContactTimeCorr,SlugMass,'xr')
-ylabel('Mass [N]')
+    fig=figure;
+    fig.Units='pixels';
+    fig.Position=[1 250 1920 500];
+    grid on
+    box on
+    plot(firstDur2a,diff(meanSlug),'xk')
+    hold on
+    plot(ContactTimeCorr,SlugMass,'xr')
+    ylabel('Mass [N]')
 
+    fig=figure;
+    fig.Units='pixels';
+    fig.Position=[1 1 1920 500];
+    hold on
+    plot(ContactTimeCorr,YieldStress,'xr')
+    ylabel('Yield stress [kPa]')
 
+    fig=figure;
+    fig.Units='pixels';
+    fig.Position=[1 1 1920/3 500];
+    hold on
+    histogram(YieldStress,'FaceColor','k','EdgeColor','k','FaceAlpha',0.5)
+    xlabel('Yield stress [kPa]')
+    ylabel('Frequency')
+end
 
 %% Save as csv file
 saveData=table(ContactTime,ContactTimeCorr,SlugMass);
