@@ -160,6 +160,6 @@ if plotting == true
 end
 
 %% Save as csv file
-saveData=table(ContactTime,ContactTimeCorr,SlugMass);
+saveData=table(ContactTime,ContactTimeCorr,SlugMass,YieldStress);
 writetable(saveData,fileName+"_Results.csv")
 
