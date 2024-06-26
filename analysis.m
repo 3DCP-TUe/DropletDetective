@@ -3,8 +3,8 @@ clear all; close all; clc
 %% Location and settings
 
 %Location and filename of the load cell data
-filePath = "";
-fileName = ""; 
+filePath = "D:\OneDrive - TU Eindhoven\VENI - Digital Fabrication with Concrete\04_Experiments\20240618_RILEM_DAY2\Slug test\Load cell";
+fileName = "20240618_RILEM2"; 
 fileExtension = ".csv";
 loggerType = "py"; %"py" refers to the OPC-UA logger in python https://github.com/arjendeetman/Python-OPC-UA or "ua" refers to the logger in UA Expert
 
@@ -21,7 +21,7 @@ lim1 = 0.05; %N
 interTimeLimit = 0.2; %seconds - When the time inbetween two stable measurments is larger than "interTime", the stable measurements belong to a different stable plateau.
 minNo = 5; %Minimum number of stable measurements to select the stable plateau for further processing
 
-filterMethod = "medianDetection"; %removeOutliers or "medianDetection"
+filterMethod = "medianDetection"; %"removeOutliers" or "medianDetection"
 %Setting for filterMethod median detection
 intervalLimit=0.7;
 
@@ -43,7 +43,7 @@ elseif loggerType=="py"
     T.Value=T.Load;
 end
 
-%%
+%% Detect slugs
 Dur=T2-T2(1); 
 S=movstd(T.Value,k1);
 
@@ -78,12 +78,12 @@ for i=2:length(Val2)
     Dur3{k}(j)=Dur2(i);
     Time3{k}(j)=Time2(i);
 end
-
 interTime=firstTime(2:end)-lastTime(1:end-1);
 
-% TODO improve this methods. Instead of simply removing outliers, it could 
-% be based on thresholds. In practice it does, however, seem to work well 
-% since the outliers are located around bucket changes.
+massFlowA=diff(meanSlug/9.81)./minutes(diff(firstDur));
+massFlow=massFlowA(massFlowA>0.1*median(massFlowA)&massFlowA<1.9*median(massFlowA)); %kg/min
+
+%Filter slug values based on filterMethod. 
 if filterMethod =="removeOutliers"
     [SlugMass, I]=rmoutliers(diff(meanSlug)');
     firstDur2a=firstDur(2:end);
@@ -105,16 +105,16 @@ elseif filterMethod == "medianDetection"
     ContactTimeA=firstTime2a(interTime>(1-intervalLimit)*median(interTime)&interTime<(1+intervalLimit)*median(interTime));
     ContactTime=ContactTimeA(SlugMassB>0.1*median(SlugMassB))';
 end
+
 YieldStress=SlugMass/(sqrt(3)*1/4*pi*nozzleDiameter^2)*1000; %kPa
+
 disp("Sum "+sum(SlugMass)/9.81+" kg - "+length(SlugMass) +" slugs")
+disp(mean(massFlow)+" kg/min")
  
-% figure
-% plot(SlugMassA,'xk')
-% hold on
-% plot(SlugMassB,'xr')
+%% Calculate mass flow rate
 
 
-%%
+%% Plot results
 if plotting == true
     close all
 
