@@ -5,7 +5,7 @@ This repository contains scripts for the analysis of falling droplets.
 
 ### Python
 
-The current release is tested with Python 3.8 and requires the following libraries:
+The current release is tested with Python 3.12 and requires the following libraries:
 - To connect to an OPC UA server: opcua-asyncio (py -m pip install asyncua) 
 
 ## Coordinates
