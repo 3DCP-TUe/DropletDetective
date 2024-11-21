@@ -51,10 +51,19 @@ minNo = 5;
 
 % -------------------------------------------------------------------------
 % Select the method that is used for filtering. Options are:
-% "removeOutliers"
-% "medianIntervalTime"
-% "medianMass"
-% "medianMass+stdMass"
+
+% "removeOutliers": uses the standard rmoutliers method from Matlab
+
+% "medianIntervalTime": removes outliers based on their distance from the
+% moving median of the time between droplets. 
+
+% "medianMass": removes outliers based on their distance from the
+% moving median of the mass of the droplets. 
+
+% "medianMass+stdMass": removes outliers based on their distance from the
+% moving median of the mass of the droplets and subsequently removes
+% outliers based on the an "factorStd" number of (moving) standard
+% deviations away from the median.
 % -------------------------------------------------------------------------
 
 filterMethod = "medianMass+stdMass"; 
@@ -77,8 +86,10 @@ movingInteger = 200;
 
 % -------------------------------------------------------------------------
 % Settings for filterMethod "medianMass+stdMass"
-% -------------------------------------------------------------------------
 
+% Tolerance bound defined by the number of standard deviations that are
+% allowed (for example: 2 sigma).
+% -------------------------------------------------------------------------
 
 factorStd=2; 
 
