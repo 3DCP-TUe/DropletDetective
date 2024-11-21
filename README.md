@@ -41,12 +41,12 @@ We are committed to the principles of open science to ensure that our work can b
 - Unique Resources and Data: We have equipment and facilities that are not available at other institutes. We generate data that other institutes cannot produce, and we share this data openly.
 - Data and Software Sharing: We share our data and software and encourage others to do the same. If others use our data and software, they must also share their software and data under similar terms.
 
-To support these principles, we license our software under the General Public License version 3 or later (free to use, with attribution, share with source code). By adhering to these principles, we aim to encourage an open and collaborative scientific community. We expect that if you use our resources, you will do the same. 
+To support these principles, we license our software under the General Public License version 3 or later (free to use, with attribution, share with source code) and our data and documentation under CC BY-SA (free to use, with attribution, share-alike). By adhering to these principles, we aim to encourage an open and collaborative scientific community. We expect that if you use our resources, you will do the same. 
 
 ## License
 
 Copyright (c) 2024 [3D Concrete Printing Research Group at Eindhoven University of Technology](https://www.tue.nl/en/research/research-groups/structural-engineering-and-design/3d-concrete-printing)
 
-This work is licensed under a GNU General Public License.
+This work is licensed under a GNU General Public License version 3 or later.
 You should have received a copy of the GNU General Public License along with Droplet Detective; If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
 
