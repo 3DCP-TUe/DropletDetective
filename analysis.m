@@ -1,6 +1,6 @@
 clear all; close all; clc
 
-%% Location and settings
+%% File locations and settings
 
 %Location and filename of the load cell data
 % filePath = "D:\OneDrive - TU Eindhoven\VENI - Digital Fabrication with Concrete\04_Experiments\20240927_Chapter9_1\dropletdetective\Load Cell";
@@ -11,34 +11,89 @@ filePath = "D:\OneDrive - TU Eindhoven\VENI - Digital Fabrication with Concrete\
 fileName = "20241014_Chapter9_3"; 
 
 fileExtension = ".csv";
-loggerType = "py"; %"py" refers to the OPC-UA logger in python https://github.com/arjendeetman/Python-OPC-UA or "ua" refers to the logger in UA Expert
 
-nozzleDiameter = 25; %mm
-bucketWeight = 12; %N
+% Select the logger type 
+% "py" refers to the OPC-UA logger in python https://github.com/arjendeetman/Python-OPC-UA 
+% "ua" refers to the logger in UA Expert
+loggerType = "py"; 
 
-%Set values for stable plateau detection
-%A moving standard deviation is applied with window size "k1". When the
-%value of this moving standard deviation is larger than "lim1" that
-%measured value is labelled as unstable.
+% Set the nozzle diameter, used to calculate yield stress from droplet mass
+nozzleDiameter = 25; %mm 
 
-k1 = 10; %Window size
-lim1 = 0.05; %N
+% Set the bucket mass. This is a lower bound below values are not considered 
+% for analysis
+bucketWeight = 12; %N 
 
-interTimeLimit = 0.2; %seconds - When the time inbetween two stable measurments is larger than "interTime", the stable measurements belong to a different stable plateau.
-minNo = 5; %Minimum number of stable measurements to select the stable plateau for further processing
-
-filterMethod = "medianMass+stdMass"; %"removeOutliers", "medianIntervalTime", "medianMass", or "medianMass+stdMass"
-
-%Settings for filterMethod medianIntervalTime, medianMass, and medianMass+stdMass
-tolerance=0.8; %Upper (1+tolerance) and lower (1-tolerance) limit of the allowed tolerance as a factor of the median interval time or mass. Recommended value between 0.5 and 1.
-movingInteger = 200; %Window seze over which the moving median or moving standard deviation is calculated.
-
-%Settings for filterMethod "medianMass+stdMass"
-factorStd=2; %Tolerance bound defined by the number of standard deviations that are allowed (for example: 2 sigma).
-
+% Choose if the results should be plotted
 plotting = true;
 
+% -------------------------------------------------------------------------
+% Set values for stable plateau detection
+% -------------------------------------------------------------------------
 
+% A moving standard deviation is applied with window size "k1". When the
+% value of this moving standard deviation is larger than "lim1" that
+% measured value is labelled as unstable.
+
+% Window size for movind standard deviation
+k1 = 10; 
+
+% Tolerance bound
+lim1 = 0.05; %N 
+
+% When the time inbetween two stable measurments is larger than "interTime", 
+% the stable measurements belong to a different stable plateau.
+interTimeLimit = 0.2; %seconds
+
+% Minimum number of stable measurements to select the stable plateau for 
+% further processing
+minNo = 5; 
+
+% -------------------------------------------------------------------------
+% Select the method that is used for filtering. Options are:
+
+% "removeOutliers": uses the standard rmoutliers method from Matlab
+
+% "medianIntervalTime": removes outliers based on their distance from the
+% moving median of the time between droplets. 
+
+% "medianMass": removes outliers based on their distance from the
+% moving median of the mass of the droplets. 
+
+% "medianMass+stdMass": removes outliers based on their distance from the
+% moving median of the mass of the droplets and subsequently removes
+% outliers based on the an "factorStd" number of (moving) standard
+% deviations away from the median.
+% -------------------------------------------------------------------------
+
+filterMethod = "medianMass+stdMass"; 
+
+% -------------------------------------------------------------------------
+% Select tolerance and movingInteger for filterMethod "medianIntervalTime",
+% "medianMass", and "medianMass+stdMass".
+
+% tolerance: Upper (1+tolerance) and lower (1-tolerance) limit of the allowed tolerance 
+% as a factor of the % median interval time (for "medianIntervalTime") or 
+% mass (for "medianMass", and "medianMass+stdMass"). 
+% Recommended value between 0.5 and 1.
+
+% movingInteger: Window size over which the moving median or moving standard 
+% deviation is calculated.
+% ------------------------------------------------------------------------
+
+tolerance=0.8; 
+movingInteger = 200; 
+
+% -------------------------------------------------------------------------
+% Settings for filterMethod "medianMass+stdMass"
+
+% Tolerance bound defined by the number of standard deviations that are
+% allowed (for example: 2 sigma).
+% -------------------------------------------------------------------------
+
+factorStd=2; 
+
+%% No more settings below this line.
 %% Read file
 
 cd(filePath)
