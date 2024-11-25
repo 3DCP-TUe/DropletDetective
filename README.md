@@ -1,5 +1,5 @@
-# DropletDetective
-DropletDetective aims to bundle the tools and methodologies that are used to perform the so called "slugs test". This is an experimental method that allows for the determination of the tensile strength of concrete and other materials by evaluation the droplet size as the material separates when exiting a nozzle. 
+# Droplet Detective
+Droplet Detective aims to bundle the tools and methodologies that are used to perform the so called "slugs test". This is an experimental method that allows for the determination of the tensile strength of concrete and other materials by evaluation the droplet size as the material separates when exiting a nozzle. 
 
 This repository contains:
 - a Python script that allows for the continuous logging of load cell measurements
@@ -20,13 +20,12 @@ The current release is tested with Python 3.12 and Matlab R2023b and requires th
 Gantry robot coordinates for droplet test at TU/e are `X8281 Y4074 Z900`.
 
 ## Version numbering
-
-The DropletDetective project uses the following versioning scheme: 
+Droplet Detective uses the following [Semantic Versioning](https://semver.org/) scheme: 
 
 ```
-0.x.x ---> MAJOR version: Incompatible changes; for example, restructuring the database format and metadata files.
-x.0.x ---> MINOR version: Functionality added in a backward-compatible manner; for example, new system components.
-x.x.0 ---> PATCH version: Small backward-compatible changes; for example, small corrections in a component property.
+0.x.x ---> MAJOR version when you make incompatible API changes
+x.0.x ---> MINOR version when you add functionality in a backward-compatible manner
+x.x.0 ---> PATCH version when you make backward-compatible bug fixes
 ```
 
 ## Contact information
@@ -47,6 +46,10 @@ To support these principles, we license our software under the General Public Li
 
 Copyright (c) 2024 [3D Concrete Printing Research Group at Eindhoven University of Technology](https://www.tue.nl/en/research/research-groups/structural-engineering-and-design/3d-concrete-printing)
 
-This work is licensed under a GNU General Public License version 3 or later.
-You should have received a copy of the GNU General Public License along with Droplet Detective; If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
+Droplet Detective is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 3.0 as published by the Free Software Foundation. 
 
+Droplet Detective is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with Concrete Candy Tracker; If not, see <http://www.gnu.org/licenses/>.
+
+@license GPL-3.0 <https://www.gnu.org/licenses/gpl-3.0.html>
