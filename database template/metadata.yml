@@ -1,0 +1,12 @@
+software setting: 
+    load cell:
+        samplingrate [Hz]: 50
+    signal conditioner: 
+        filter: Bessel
+        cutoff frequency [Hz]: 16     
+hardware:
+    load cell: 
+        name: HBM U3
+        maxload [kN]: 1
+    signal conditioner:
+        name: HBM ClipX BM40IE
