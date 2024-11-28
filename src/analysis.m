@@ -1,16 +1,23 @@
+%{
+This file is based on Droplet Detective. Droplet Detective is licensed under the terms 
+of GNU General Public License as published by the Free Software Foundation. For more 
+information and the LICENSE file, see <https://github.com/3DCP-TUe/DropletDetective>.
+%}
+
+%%
 clear all; close all; clc
 
 %% File locations and settings
+%{
+Location and filename of the load cell data
+If filePath exists, filePath, fileName, and fileExtension will be used to
+load the file. Else a folder "raw_data" is assumed to exist one folder up,
+and the data will be read from there.
+%}
 
-%Location and filename of the load cell data
-% filePath = "D:\OneDrive - TU Eindhoven\VENI - Digital Fabrication with Concrete\04_Experiments\20240927_Chapter9_1\dropletdetective\Load Cell";
-% fileName = "20240930_Chapter9_1"; 
-% filePath = "D:\OneDrive - TU Eindhoven\VENI - Digital Fabrication with Concrete\04_Experiments\20241007_Chapter9_2\dropletdetective\Load Cell";
-% fileName = "20241007_Chapter9_2"; 
-filePath = "D:\OneDrive - TU Eindhoven\VENI - Digital Fabrication with Concrete\04_Experiments\20241014_Chapter9_3\dropletdetective\Load Cell";
-fileName = "20241014_Chapter9_3"; 
-
-fileExtension = ".csv";
+% filePath = "D:\";
+% fileName = ""; 
+% fileExtension = ".csv";
 
 % Select the logger type 
 % "py" refers to the OPC-UA logger in python https://github.com/arjendeetman/Python-OPC-UA 
@@ -95,9 +102,16 @@ factorStd=2;
 
 %% No more settings below this line.
 %% Read file
+if exist('filePath')==1
+    cd(filePath)
+    T=readtable(fileName+fileExtension,'Delimiter',',');
+else
+    cd("../raw_data")
+    files=dir;
+    T=readtable(files(3).name,'Delimiter',',');
+end
 
-cd(filePath)
-T=readtable(fileName+fileExtension,'Delimiter',',');
+
 if loggerType=="ua"
     for j=1:height(T)
         T2(j,1)=datetime(T.SourceTimeStamp{j},'InputFormat','yyyy-MM-dd''T''HH:mm:ss.SSSZ','TimeZone','UTC');
@@ -265,7 +279,12 @@ disp("Sum "+sum(SlugMass)/9.81+" kg - "+length(SlugMass) +" slugs")
 disp(mean(massFlow)+" kg/min")
 
 
-%% Plot results
+%% Plot and save results
+cd("../")
+if not(isfolder("processed_data"))
+    mkdir("processed_data")
+end
+cd("processed_data")
 if plotting == true
     close all
 
@@ -280,7 +299,7 @@ if plotting == true
     % lastDurPlot=plot(lastDur,meanSlug,'xb');
     yyaxis right
     hold on
-    pl=plot(ContactTimeCorr,SlugMass,'x','Color','m');
+    pl=plot(ContactTime,SlugMass,'x','Color','m');
     ax=gca;
     ax.YAxis(2).Color='m';
 
@@ -291,28 +310,35 @@ if plotting == true
     box on
     plot(firstDur2a,diff(meanLoad),'xk')
     hold on
-    plot(ContactTimeCorr,SlugMass,'xr')
+    plot(ContactTime,SlugMass,'xr')
     ylabel('Mass [N]')
 
     fig=figure;
-    fig.Units='pixels';
-    fig.Position=[1 1 1920 500];
+    fig.Units='centimeters';
+    fig.Position=[10 10 30 9];
     hold on
-    plot(ContactTimeCorr,YieldStress,'xr')
-    ylabel('Yield stress [kPa]')
+    grid on
+    box on
+    plot(ContactTime,YieldStress,'xk')
+    xlabel('Time','Interpreter','latex','FontSize',14)
+    ylabel('Yield stress [kPa]','Interpreter','latex','FontSize',14)
+    saveas(fig,files(3).name(1:end-4)+"_yield_stress_time.svg")
 
     fig=figure;
-    fig.Units='pixels';
-    fig.Position=[1 1 1920/3 500];
+    fig.Units='centimeters';
+    fig.Position=[10 10 14 9];
     hold on
+    grid on
+    box on
     histogram(YieldStress,'FaceColor','k','EdgeColor','k','FaceAlpha',0.5)
-    xlabel('Yield stress [kPa]')
-    ylabel('Frequency')
+    xlabel('Yield stress [kPa]','Interpreter','latex','FontSize',14)
+    ylabel('Frequency','Interpreter','latex','FontSize',14)
+    saveas(fig,files(3).name(1:end-4)+"_processed_histogram.svg")
 end
 
 %% Save as csv file
 saveData=table(ContactTime,ContactTimeCorr,SlugMass,YieldStress);
-writetable(saveData,fileName+"_Results.csv")
+writetable(saveData,files(3).name(1:end-4)+"_processed_yield_stress.csv")
 
 saveData2=table(meanTimeBucket',massFlowBucket');
-writetable(saveData2,fileName+"_ResultsMassFlowPerBucket.csv")
+writetable(saveData2,files(3).name(1:end-4)+"_processed_mass_flow.csv")
