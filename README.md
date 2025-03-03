@@ -3,7 +3,8 @@ Droplet Detective aims to bundle the tools and methodologies that are used to pe
 
 This repository contains:
 - a Python script that allows for the continuous logging of load cell measurements
-- a Matlab script that allows for the detection of invidual droplets from a log file of a load cell on which droplets have fallen. 
+- a Matlab script that allows for the detection of invidual droplets from a log file of a load cell on which droplets have fallen.
+- a Matlab script that allows for the estimation of droplet volume from a single image. Based on the assumption that the droplet is axisymmetric.
 
 ## References 
 - https://doi.org/10.1016/j.cemconcomp.2021.104074
