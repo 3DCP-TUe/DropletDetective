@@ -85,5 +85,5 @@ for f=1:length(folders)
 
     %Write the results to a timeseries csv file
     T=table(dur,volume/1000,'VariableNames',["Time","Volume_cm3"]);
-    writetable(T,folder+"_processed.csv");
+    writetable(T,folder(1:8)+"_inline_"+f+"_processed_volumes.csv");
 end
