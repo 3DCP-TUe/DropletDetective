@@ -11,25 +11,25 @@ clear all; close all; clc
 %{
 Location and filename of the load cell data
 If filePath exists, filePath, fileName, and fileExtension will be used to
-load the file. Else a folder "raw_data" is assumed to exist one folder up,
+load the file. Else, a folder "raw_data" is assumed to exist one folder up,
 and the data will be read from there.
 %}
 
 % filePath = "D:\";
-% fileName = ""; 
+% fileName = "";
 % fileExtension = ".csv";
 
-% Select the logger type 
-% "py" refers to the OPC-UA logger in python https://github.com/arjendeetman/Python-OPC-UA 
+% Select the logger type
+% "py" refers to the OPC-UA logger in python https://github.com/arjendeetman/Python-OPC-UA
 % "ua" refers to the logger in UA Expert
-loggerType = "py"; 
+loggerType = "py";
 
 % Set the nozzle diameter, used to calculate yield stress from droplet mass
-nozzleDiameter = 25; %mm 
+nozzleDiameter = 25; %mm
 
-% Set the bucket mass. This is a lower bound below values are not considered 
+% Set the bucket mass. This is a lower bound below values are not considered
 % for analysis
-bucketWeight = 12; %N 
+bucketWeight = 12; %N
 
 % Choose if the results should be plotted
 plotting = true;
@@ -43,18 +43,18 @@ plotting = true;
 % measured value is labelled as unstable.
 
 % Window size for movind standard deviation
-k1 = 10; 
+k1 = 10;
 
 % Tolerance bound
-lim1 = 0.05; %N 
+lim1 = 0.05; %N
 
-% When the time inbetween two stable measurments is larger than "interTime", 
+% When the time inbetween two stable measurments is larger than "interTime",
 % the stable measurements belong to a different stable plateau.
 interTimeLimit = 0.2; %seconds
 
-% Minimum number of stable measurements to select the stable plateau for 
+% Minimum number of stable measurements to select the stable plateau for
 % further processing
-minNo = 5; 
+minNo = 5;
 
 % -------------------------------------------------------------------------
 % Select the method that is used for filtering. Options are:
@@ -62,10 +62,10 @@ minNo = 5;
 % "removeOutliers": uses the standard rmoutliers method from Matlab
 
 % "medianIntervalTime": removes outliers based on their distance from the
-% moving median of the time between droplets. 
+% moving median of the time between droplets.
 
 % "medianMass": removes outliers based on their distance from the
-% moving median of the mass of the droplets. 
+% moving median of the mass of the droplets.
 
 % "medianMass+stdMass": removes outliers based on their distance from the
 % moving median of the mass of the droplets and subsequently removes
@@ -73,23 +73,23 @@ minNo = 5;
 % deviations away from the median.
 % -------------------------------------------------------------------------
 
-filterMethod = "medianMass+stdMass"; 
+filterMethod = "medianMass+stdMass";
 
 % -------------------------------------------------------------------------
 % Select tolerance and movingInteger for filterMethod "medianIntervalTime",
 % "medianMass", and "medianMass+stdMass".
 
-% tolerance: Upper (1+tolerance) and lower (1-tolerance) limit of the allowed tolerance 
-% as a factor of the % median interval time (for "medianIntervalTime") or 
-% mass (for "medianMass", and "medianMass+stdMass"). 
+% tolerance: Upper (1+tolerance) and lower (1-tolerance) limit of the allowed tolerance
+% as a factor of the % median interval time (for "medianIntervalTime") or
+% mass (for "medianMass", and "medianMass+stdMass").
 % Recommended value between 0.5 and 1.
 
-% movingInteger: Window size over which the moving median or moving standard 
+% movingInteger: Window size over which the moving median or moving standard
 % deviation is calculated.
 % ------------------------------------------------------------------------
 
-tolerance=0.8; 
-movingInteger = 200; 
+tolerance=0.8;
+movingInteger = 200;
 
 % -------------------------------------------------------------------------
 % Settings for filterMethod "medianMass+stdMass"
@@ -98,23 +98,27 @@ movingInteger = 200;
 % allowed (for example: 2 sigma).
 % -------------------------------------------------------------------------
 
-factorStd=2; 
+factorStd=2;
 
 %% No more settings below this line.
 %% Read file
+T=[];
 if exist('filePath')==1
     cd(filePath)
-    T=readtable(fileName+fileExtension,'Delimiter',',');
+    T=[T; readtable(fileName+fileExtension,'Delimiter',',')];
 else
     cd("../raw_data")
-    files=dir;
-    T=readtable(files(3).name,'Delimiter',',');
+    files=dir("*.csv");
+    for i=1:length(files)
+        T=[T; readtable(files(i).name,'Delimiter',',')];
+    end
 end
 
 
 if loggerType=="ua"
     for j=1:height(T)
-        T2(j,1)=datetime(T.SourceTimeStamp{j},'InputFormat','yyyy-MM-dd''T''HH:mm:ss.SSSZ','TimeZone','UTC');
+        Ttemp=datetime(T.SourceTimeStamp{j},'InputFormat','yyyy-MM-dd''T''HH:mm:ss.SSSZ','TimeZone','UTC');
+        T2(j,1)=duration(hour(Ttemp)-12,minute(Ttemp),second(Ttemp));
     end
 elseif loggerType=="py"
     T2=T.Time;
@@ -122,7 +126,7 @@ elseif loggerType=="py"
 end
 
 %% Detect slugs
-Dur=T2-T2(1); 
+Dur=T2-T2(1);
 
 Val1=T.Value(T.Value>bucketWeight);
 Dur1=Dur(T.Value>bucketWeight);
@@ -139,7 +143,7 @@ clear S Val3 Dur3 firstDur lastDur meanLoad firstTime lastTime
 k=1;
 j=0;
 for i=2:length(Val2)
-%   diffDur(i-1)=seconds(Dur2(i)-Dur2(i-1));
+    %   diffDur(i-1)=seconds(Dur2(i)-Dur2(i-1));
     j=j+1;
     if Dur2(i)-Dur2(i-1)>seconds(interTimeLimit)
         if j<minNo
@@ -166,7 +170,7 @@ end
 clear meanLoad2 firstTime2
 k=1;
 j=1;
-for i=2:length(meanLoad)    
+for i=2:length(meanLoad)
     if meanLoad(i)>meanLoad(i-1)-1 && diff([firstTime(i-1) firstTime(i)])<seconds(10)
         meanLoad2{k}(j)=meanLoad(i-1);
         firstTime2{k}(j)=firstTime(i-1);
@@ -189,13 +193,15 @@ for k2=1:length(meanLoad2)
     if isempty(meanLoad2{k2})==0
         k1=k1+1;
         % massFlowBucket(k1)=(meanLoad2{k2}(end)-meanLoad2{k2}(1))/9.81/minutes(firstTime2{k}(end)-firstTime2{k}(1));
-        meanTimeBucket(k1)=mean([firstTime2{k2}(end); firstTime2{k2}(1)]);
+        midTimeBucket(k1)=mean([firstTime2{k2}(end); firstTime2{k2}(1)]);
+        startTimeBucket(k1)=firstTime2{k2}(1);
+        endTimeBucket(k1)=firstTime2{k2}(end);
         x=minutes(firstTime2{k2}'-firstTime2{k2}(1));
         b1=([ones(length(x),1) x])\(meanLoad2{k2}'/9.81);
         massFlowBucket(k1)=b1(2);
     end
 end
-% 
+%
 % k1=1;
 % k2=1;
 % figure
@@ -210,10 +216,10 @@ massFlowA=diff(meanLoad/9.81)./minutes(diff(firstDur));
 massFlow=massFlowA(massFlowA>0.1*median(massFlowA)&massFlowA<1.9*median(massFlowA)); %kg/min
 %%
 figure
-plot(meanTimeBucket,massFlowBucket)
+plot(midTimeBucket,massFlowBucket)
 %%
 
-%Filter slug values based on filterMethod. 
+%Filter slug values based on filterMethod.
 if filterMethod =="removeOutliers"
     [SlugMass, I]=rmoutliers(diff(meanLoad)');
     firstDur2a=firstDur(2:end);
@@ -221,7 +227,7 @@ if filterMethod =="removeOutliers"
     ContactTimeCorr=firstDur2a(~I)';
     ContactTime=firstTime2a(~I)';
     disp("Outliers removed: "+sum(I)+" of "+length(SlugMass))
-elseif filterMethod == "medianIntervalTime" 
+elseif filterMethod == "medianIntervalTime"
     interTime=seconds(firstTime(2:end)-lastTime(1:end-1));
     SlugMassA=diff(meanLoad)';
     SlugMassB=SlugMassA(SlugMassA>0.1*median(SlugMassA));
@@ -234,11 +240,11 @@ elseif filterMethod == "medianIntervalTime"
     firstDur2a=firstDur(2:end);
     ContactTimeCorrA=firstDur2a(SlugMassA>0.1*median(SlugMassA))';
     ContactTimeCorr=ContactTimeCorrA(interTimeB>(1-tolerance)*movMedianInterTimeB&interTimeB<(1+tolerance)*movMedianInterTimeB);
-    
+
     firstTime2a=firstTime(2:end);
     ContactTimeA=firstTime2a(SlugMassA>0.1*median(SlugMassA))';
     ContactTime=ContactTimeA(interTimeB>(1-tolerance)*movMedianInterTimeB&interTimeB<(1+tolerance)*movMedianInterTimeB);
-elseif filterMethod == "medianMass" 
+elseif filterMethod == "medianMass"
     SlugMassA=diff(meanLoad)';
     SlugMassB=SlugMassA(SlugMassA>0.1*median(SlugMassA));
 
@@ -249,7 +255,7 @@ elseif filterMethod == "medianMass"
     firstDur2a=firstDur(2:end);
     ContactTimeCorrA=firstDur2a(SlugMassA>0.1*median(SlugMassA))';
     ContactTimeCorr=ContactTimeCorrA(SlugMassB>(1-tolerance)*movMedianMass&SlugMassB<(1+tolerance)*movMedianMass);
-    
+
     firstTime2a=firstTime(2:end);
     ContactTimeA=firstTime2a(SlugMassA>0.1*median(SlugMassA))';
     ContactTime=ContactTimeA(SlugMassB>(1-tolerance)*movMedianMass&SlugMassB<(1+tolerance)*movMedianMass);
@@ -288,13 +294,18 @@ cd("processed_data")
 if plotting == true
     close all
 
+    if not(isfolder("figures"))
+        mkdir("figures")
+    end
+    cd("figures")
+
     fig=figure;
     fig.Units='pixels';
     fig.Position=[1 500 1920 500];
-    raw=plot(Dur,T.Value);
+    raw=plot(Dur+T2(1),T.Value);
     hold on
     % xlim([minutes(1),minutes(2)])
-    stable=plot(Dur2,Val2,'.r');
+    stable=plot(Dur2+T2(1),Val2,'.r');
     % firstDurPlot=plot(firstDur,meanSlug,'xg');
     % lastDurPlot=plot(lastDur,meanSlug,'xb');
     yyaxis right
@@ -308,7 +319,7 @@ if plotting == true
     fig.Position=[1 250 1920 500];
     grid on
     box on
-    plot(firstDur2a,diff(meanLoad),'xk')
+    plot(firstDur2a+T2(1),diff(meanLoad),'xk')
     hold on
     plot(ContactTime,SlugMass,'xr')
     ylabel('Mass [N]')
@@ -322,7 +333,7 @@ if plotting == true
     plot(ContactTime,YieldStress,'xk')
     xlabel('Time','Interpreter','latex','FontSize',14)
     ylabel('Yield stress [kPa]','Interpreter','latex','FontSize',14)
-    saveas(fig,files(3).name(1:end-4)+"_yield_stress_time.svg")
+    saveas(fig,files(1).name(1:end-4)+"_yield_stress_time.svg")
 
     fig=figure;
     fig.Units='centimeters';
@@ -333,12 +344,13 @@ if plotting == true
     histogram(YieldStress,'FaceColor','k','EdgeColor','k','FaceAlpha',0.5)
     xlabel('Yield stress [kPa]','Interpreter','latex','FontSize',14)
     ylabel('Frequency','Interpreter','latex','FontSize',14)
-    saveas(fig,files(3).name(1:end-4)+"_processed_histogram.svg")
+    saveas(fig,files(1).name(1:end-4)+"_processed_histogram.svg")
+    cd("../")
 end
 
 %% Save as csv file
-saveData=table(ContactTime,ContactTimeCorr,SlugMass,YieldStress);
-writetable(saveData,files(3).name(1:end-4)+"_processed_yield_stress.csv")
+saveData=table(ContactTime,SlugMass,YieldStress,'VariableNames',["time","droplet_mass","yield_stress"]);
+writetable(saveData,files(1).name(1:end-4)+"_processed_yield_stress.csv")
 
-saveData2=table(meanTimeBucket',massFlowBucket');
-writetable(saveData2,files(3).name(1:end-4)+"_processed_mass_flow.csv")
+saveData2=table(startTimeBucket',endTimeBucket',midTimeBucket',massFlowBucket','VariableNames',["collection_time_start","collection_time_mid","collection_time_end","mass_flow"]);
+writetable(saveData2,files(1).name(1:end-4)+"_processed_mass_flow.csv")
