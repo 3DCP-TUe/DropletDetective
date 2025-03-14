@@ -1,0 +1,34 @@
+{
+	"creators": [
+		{
+			"name": "Bos, Derk",
+			"affiliation": "Eindhoven University of Technology",
+			"orcid": "0000-0002-1668-2638"
+		},
+		{
+			"name": "Deetman, Arjen",
+			"affiliation": "Eindhoven University of Technology",
+			"orcid": "0000-0001-6756-5151"
+		}
+		
+	],
+
+	"access_right": "open",
+
+	"license": "GPL-3.0",
+
+	"title": "Droplet Detective: Data logging and dashboarding tool for 3DCP",
+
+	"description": "Droplet Detective aims to bundle the tools and methodologies that are used to perform the so called Slugs test. This is an experimental method that allows for the determination of the tensile strength of concrete and other materials by evaluation the droplet size as the material separates when exiting a nozzle.",
+
+	"keywords": [
+		"3DCP",
+		"3d concrete printing",
+		"slugs test",
+		"quality control",
+		"tensile strength",
+		"rheology"
+	],
+
+	"upload_type": "software"
+}
