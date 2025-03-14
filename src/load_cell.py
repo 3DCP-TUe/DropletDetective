@@ -1,5 +1,5 @@
 """
-This file is part of the software package Droplet Detective" of Eindhoven University of Technology. 
+This file is part of the software package Droplet Detective of Eindhoven University of Technology. 
 The files of this project are licensed under the terms of GNU General Public License 
 version 3.0 (GPL v3.0) as published by the Free Software Foundation. For more information 
 and the LICENSE file, see <https://github.com/3DCP-TUe/DropletDetective>.

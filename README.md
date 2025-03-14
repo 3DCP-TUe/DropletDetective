@@ -7,9 +7,14 @@ This repository contains:
 - a Matlab script that allows for the estimation of droplet volume from a single image. Based on the assumption that the droplet is axisymmetric.
 
 ## References 
-- https://doi.org/10.1016/j.cemconcomp.2021.104074
-- https://doi.org/10.1007/978-3-030-49916-7_22
-- https://doi.org/10.1007/978-3-031-06116-5_67
+- The "Slugs-test" for extrusion-based additive manufacturing: Protocol, analysis and practical limits      
+https://doi.org/10.1016/j.cemconcomp.2021.104074
+
+- "The Slug Test": Inline Assessment of Yield Stress for Extrusion-Based Additive Manufacturing            
+https://doi.org/10.1007/978-3-030-49916-7_22
+
+- Automated Visual Inspection of Near Nozzle Droplet Formation for Quality Control of Additive Manufacturing    
+https://doi.org/10.1007/978-3-031-06116-5_67
 
 ## Installation
 
