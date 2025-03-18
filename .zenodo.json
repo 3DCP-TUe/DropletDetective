@@ -10,14 +10,13 @@
 			"affiliation": "Eindhoven University of Technology",
 			"orcid": "0000-0001-6756-5151"
 		}
-		
 	],
 
 	"access_right": "open",
 
 	"license": "GPL-3.0",
 
-	"title": "Droplet Detective: Data logging and dashboarding tool for 3DCP",
+	"title": "Droplet Detective: A data acquisition and analysis toolbox for the slugs test",
 
 	"description": "Droplet Detective aims to bundle the tools and methodologies that are used to perform the so called Slugs test. This is an experimental method that allows for the determination of the tensile strength of concrete and other materials by evaluation the droplet size as the material separates when exiting a nozzle.",
 
