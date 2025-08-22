@@ -19,7 +19,24 @@ https://doi.org/10.1007/978-3-031-06116-5_67
 ## Installation
 
 The current release is tested with Python 3.12 and Matlab R2023b and requires the following libraries:
-- To connect to an OPC UA server: opcua-asyncio (py -m pip install asyncua) 
+- To connect to an OPC UA server: opcua-asyncio (py -m pip install asyncua)
+
+## Explanation of the files
+
+### Data acquisition
+
+Files related to data acquisition are located in the **[src/acquisition/](src/acquisition/)** directory and include the following files and folders:
+
+- **[load_cell.py](src/acquisition/load_cell.py):** Python script that acquires the load cell data through an OPC_UA connection with the HBM ClipX. 
+
+### Data analysis
+
+Files related to data analysis are located in the **[src/analysis/](src/analysis/)** directory and include the following files and folders:
+
+- **[analysisLoadCell.m](src/analysis/analysisLoadCell.m):** MATLAB script that reads the data from the raw_data/load_cell folder and computes the individual droplet mass, corresponding yield stress, and mass flow rate.
+- **[imagesToVolumes.m](src/analysis/imagesToVolumes.m):** MATLAB script that reads images from the raw_data_images folder and computes the droplet volume to save it in volumes.csv.
+- **[analysisVolumes.m](src/analysis/analysisVolumes.m):** MATLAB script that computes volumes_grouped.csv and volumetric_flow.csv from volumes.csv.
+- **[COMBINEDslugsRawToProcessed.m](src/analysis/COMBINEDslugsRawToProcessed.m):** MATLAB scripts that performs all of the above tasks when available data is present.
 
 ## Coordinates
 
