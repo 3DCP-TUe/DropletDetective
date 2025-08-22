@@ -1,3 +1,6 @@
+software:
+  - name: Droplet Detective
+    version: 0.2.0
 software setting: 
     load cell:
         samplingrate [Hz]: 50

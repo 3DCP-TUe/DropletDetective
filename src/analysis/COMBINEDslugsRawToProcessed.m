@@ -76,8 +76,6 @@ else
 
                 %Analyze volumes
                 if exist(files(1).name(1:end-4)+"_processed_volumes_grouped.csv")~=2 && exist(files(1).name(1:end-4)+"_processed_volumetric_flow.csv")~=2
-
-                    if exist()
                     analyzeVolumes(100,50)
                 else
                     disp("Slug image data not analyzed since the following files already exist in the processed_data folder:")
