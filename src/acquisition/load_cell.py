@@ -1,9 +1,13 @@
-"""
-This file is part of the software package Droplet Detective of Eindhoven University of Technology. 
-The files of this project are licensed under the terms of GNU General Public License 
-version 3.0 (GPL v3.0) as published by the Free Software Foundation. For more information 
-and the LICENSE file, see <https://github.com/3DCP-TUe/DropletDetective>.
-"""
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Droplet Detective
+# Project: https://github.com/3DCP-TUe/DropletDetective
+#
+# Copyright (c) 2024 Eindhoven University of Technology
+#
+# Authors:
+#   - Arjen Deetman (2024)
+#
+# For license details, see the LICENSE file in the project root.
 
 import asyncio
 import logging
