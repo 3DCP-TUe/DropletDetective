@@ -1,15 +1,66 @@
 software:
   - name: Droplet Detective
     version: 0.2.0
-software setting: 
-    load cell:
-        samplingrate [Hz]: 50
-    signal conditioner: 
-        filter: Bessel
-        cutoff frequency [Hz]: 16     
+#  - name: National Instruments Vision Builder for Automated Inspection
+#    version: ...
+
+software_setting: 
+  load_cell:
+    sampling_rate [Hz]: 50
+  signal_conditioner: 
+    filter: Bessel
+    cutoff_frequency [Hz]: 16
+#  camera:
+#    roi:
+#      width: 848
+#      height: 300
+#    white_balance_ratio:
+#      red: 1.000
+#      green: 0.550
+#      blue: 1.285
+#    whitepoint:
+#      x: 0.9225
+#      y: 0.9583
+#      z: 1.0468
+#    gain: 2.7
+#    exposure_time: 16000
+
 hardware:
-    load cell: 
-        name: HBM U3
-        maxload [kN]: 1
-    signal conditioner:
-        name: HBM ClipX BM40IE
+  load_cell: 
+    name: HBM U3
+    maxload [kN]: 1
+  signal_conditioner:
+    name: HBM ClipX BM40IE
+  camera: 
+    manufacturer: Basler
+    model: a2A1920-51gcPRO
+    interface: GigE
+    sensor:
+      vendor: Sony
+      sensor: IMX392
+      shutter: global shutter
+      format: 1/2.3"
+      diagonal: 7.77 mm
+      type: CMOS
+      size:
+        width: 6.6 mm
+        height: 4.1 mm
+      resolution:
+        width: 1920
+        height: 1200
+        frame_rate: 51
+#  lens:
+#    name: Edmund Optics 16mm C Series Fixed Focal Length Lens
+#    focal_length: 0.1
+#    aperture: f/8
+#    filters:
+#      - name: Midwest Optical AC400
+#        purpose: UV protection
+#        type: bandpass
+#        position: rear
+#      - name: Midwest Optical PR032-25.5
+#        purpose: polarization
+#        type: polarizer
+#        position: front
+#  light_source: 
+#    name: Polarized brick light PL-ELSB-105SW
