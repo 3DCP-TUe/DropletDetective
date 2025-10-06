@@ -1,4 +1,12 @@
 # Droplet Detective
+
+<p align="left"> 
+  <img src="https://img.shields.io/github/v/release/3DCP-TUe/DropletDetective?label=stable">
+  <img src="https://img.shields.io/github/v/release/3DCP-TUe/DropletDetective?label=latest&include_prereleases">
+  <img src="https://img.shields.io/github/license/3DCP-TUe/DropletDetective?">
+  <a href="https://zenodo.org/doi/10.5281/zenodo.17278090"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.17278090.svg" alt="DOI"></a>
+</p>
+
 Droplet Detective aims to bundle the tools and methodologies that are used to perform the so called "slugs test". This is an experimental method that allows for the determination of the tensile strength of concrete and other materials by evaluation the droplet size as the material separates when exiting a nozzle. 
 
 This repository contains:
