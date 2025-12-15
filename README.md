@@ -26,7 +26,7 @@ https://doi.org/10.1007/978-3-031-06116-5_67
 
 ## Installation
 
-The current release is tested with Python 3.12 and Matlab R2023b and requires the following libraries:
+The current release is tested with Python 3.12 and MATLAB R2023b and requires the following libraries:
 - To connect to an OPC UA server: opcua-asyncio (py -m pip install asyncua)
 
 ## Explanation of the files
@@ -58,10 +58,26 @@ Droplet Detective uses the following [Semantic Versioning](https://semver.org/) 
 x.0.x ---> MINOR version when you add functionality in a backward-compatible manner
 x.x.0 ---> PATCH version when you make backward-compatible bug fixes
 ```
-
 ## Contact information
 
 If you have any questions or comments about this project, please open an issue on the repository’s issue page. This can include questions about the content, such as missing information, and the data structure. We encourage you to open an issue instead of sending us emails to help establish an open community. By keeping discussions open, everyone can contribute and see the feedback and questions of others. In addition to this, please see our open science statement below.
+
+## How to cite
+
+For general references to this software package, the Zenodo record can be cited. The BibTeX entry is provided below:
+
+```bibtex
+@misc{DropletDetective_Zenodo,
+    title = {{D}roplet {D}etective: {A} data acquisition and analysis toolbox for the slugs test},
+    author = {D. Bos and A. Deetman},
+    publisher = {Zenodo},
+    year = {2025},
+    doi = {10.5281/zenodo.17278089},
+    note = {Zenodo. doi:10.5281/zenodo.17278089}
+}
+```
+
+On our [Zenodo page](https://doi.org/10.5281/zenodo.17278089), you can find how to cite specific versions of the software.
 
 ## Open science statement
 
