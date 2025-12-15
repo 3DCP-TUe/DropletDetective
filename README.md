@@ -7,7 +7,7 @@
   <a href="https://zenodo.org/doi/10.5281/zenodo.17278090"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.17278090.svg" alt="DOI"></a>
 </p>
 
-Droplet Detective aims to bundle the tools and methodologies that are used to perform the so called "slugs test". This is an experimental method that allows for the determination of the tensile strength of concrete and other materials by evaluation the droplet size as the material separates when exiting a nozzle. 
+Droplet Detective aims to bundle the tools and methodologies that are used to perform the so called "slugs test". This is an experimental method that allows for the determination of the tensile strength of concrete and other materials by evaluating the droplet size as the material separates when exiting a nozzle. 
 
 This repository contains:
 - a Python script that allows for the continuous logging of load cell measurements
