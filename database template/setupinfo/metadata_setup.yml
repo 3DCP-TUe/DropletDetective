@@ -1,8 +1,8 @@
 software:
   - name: Droplet Detective
-    version: 0.2.0
-#  - name: National Instruments Vision Builder for Automated Inspection
-#    version: ...
+    version: 0.3.0
+  - name: National Instruments Vision Builder for Automated Inspection
+    version: 2023 Q3 (64-bit)
 
 software_setting: 
   load_cell:
@@ -49,18 +49,10 @@ hardware:
         width: 1920
         height: 1200
         frame_rate: 51
-#  lens:
-#    name: Edmund Optics 16mm C Series Fixed Focal Length Lens
-#    focal_length: 0.1
-#    aperture: f/8
-#    filters:
-#      - name: Midwest Optical AC400
-#        purpose: UV protection
-#        type: bandpass
-#        position: rear
-#      - name: Midwest Optical PR032-25.5
-#        purpose: polarization
-#        type: polarizer
-#        position: front
-#  light_source: 
-#    name: Polarized brick light PL-ELSB-105SW
+  lens:
+    name: Basler C125-0818-5M
+    focal_length: 8 mm
+    aperture_range: 1.8 - 22
+    aperture_set: F1.8
+  geometry: 
+    distance_camera_to_axis_nozzle: 850 mm
