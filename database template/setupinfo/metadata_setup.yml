@@ -10,20 +10,11 @@ software_setting:
   signal_conditioner: 
     filter: Bessel
     cutoff_frequency [Hz]: 16
-#  camera:
-#    roi:
-#      width: 848
-#      height: 300
-#    white_balance_ratio:
-#      red: 1.000
-#      green: 0.550
-#      blue: 1.285
-#    whitepoint:
-#      x: 0.9225
-#      y: 0.9583
-#      z: 1.0468
-#    gain: 2.7
-#    exposure_time: 16000
+  camera:
+    gain: 0.0
+    exposure_time: 5000
+    acquisition_framerate: 100
+    pixel_format: Bayer RG 8
 
 hardware:
   load_cell: 
