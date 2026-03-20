@@ -333,7 +333,7 @@ if plotting == true
     plot(ContactTime,YieldStress,'xk')
     xlabel('Time','Interpreter','latex','FontSize',14)
     ylabel('Yield stress [kPa]','Interpreter','latex','FontSize',14)
-    saveas(fig,files(1).name(1:end-4)+"_yield_stress_time.svg")
+    saveas(fig,"yield_stress_time.svg")
 
     fig=figure;
     fig.Units='centimeters';
@@ -344,13 +344,13 @@ if plotting == true
     histogram(YieldStress,'FaceColor','k','EdgeColor','k','FaceAlpha',0.5)
     xlabel('Yield stress [kPa]','Interpreter','latex','FontSize',14)
     ylabel('Frequency','Interpreter','latex','FontSize',14)
-    saveas(fig,files(1).name(1:end-4)+"_processed_histogram.svg")
+    saveas(fig,"yield_stress_histogram.svg")
     cd("../")
 end
 
 %% Save as csv file
 saveData=table(ContactTime,SlugMass,YieldStress,'VariableNames',["time","droplet_mass","yield_stress"]);
-writetable(saveData,files(1).name(1:end-4)+"_processed_yield_stress.csv")
+writetable(saveData,"yield_stress.csv")
 
-saveData2=table(startTimeBucket',endTimeBucket',midTimeBucket',massFlowBucket','VariableNames',["collection_time_start","collection_time_mid","collection_time_end","mass_flow"]);
-writetable(saveData2,files(1).name(1:end-4)+"_processed_mass_flow.csv")
+saveData2=table(startTimeBucket',midTimeBucket',endTimeBucket',massFlowBucket','VariableNames',["deposition_time_start","deposition_time_mid","deposition_time_end","mass_flow"]);
+writetable(saveData2,"mass_flow.csv")
