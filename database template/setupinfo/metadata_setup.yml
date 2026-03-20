@@ -1,15 +1,54 @@
 software:
   - name: Droplet Detective
-    version: 0.2.0
-software setting: 
-    load cell:
-        samplingrate [Hz]: 50
-    signal conditioner: 
-        filter: Bessel
-        cutoff frequency [Hz]: 16     
+    version: 0.3.0
+  - name: National Instruments Vision Builder for Automated Inspection
+    version: 2023 Q3 (64-bit)
+
+software_setting: 
+  load_cell:
+    sampling_rate [Hz]: 50
+  signal_conditioner: 
+    filter: Bessel
+    cutoff_frequency [Hz]: 16
+  camera:
+    gain: 0.0
+    exposure_time: 5000
+    acquisition_framerate: 100
+    pixel_format: Bayer RG 8
+
 hardware:
-    load cell: 
-        name: HBM U3
-        maxload [kN]: 1
-    signal conditioner:
-        name: HBM ClipX BM40IE
+  load_cell: 
+    name: HBM U3
+    maxload [kN]: 1
+  signal_conditioner:
+    name: HBM ClipX BM40IE
+  camera: 
+    manufacturer: Basler
+    model: a2A1920-51gcPRO
+    interface: GigE
+    sensor:
+      vendor: Sony
+      sensor: IMX392
+      shutter: global shutter
+      format: 1/2.3"
+      diagonal: 7.77 mm
+      type: CMOS
+      size:
+        width: 6.6 mm
+        height: 4.1 mm
+      resolution:
+        width: 1920
+        height: 1200
+        frame_rate: 51
+  lens:
+    name: Basler C125-0818-5M
+    focal_length: 8 mm
+    aperture_range: 1.8 - 22
+    aperture_set: F1.8
+  light: 
+    width: 250 mm
+    height: 550 mm
+    color: white    
+  geometry: 
+    distance_camera_to_axis_nozzle: 850 mm
+    distance_camera_to_light: 1000 mm
