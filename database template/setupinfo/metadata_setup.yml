@@ -43,7 +43,7 @@ hardware:
   lens:
     name: Basler C125-0818-5M
     focal_length: 8 mm
-    aperture_range: 1.8 - 22
+    aperture_range: 1.8-22
     aperture_set: F1.8
   light: 
     width: 250 mm
