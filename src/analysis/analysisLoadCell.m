@@ -1,10 +1,15 @@
-%{
-This file is based on Droplet Detective. Droplet Detective is licensed under the terms 
-of GNU General Public License as published by the Free Software Foundation. For more 
-information and the LICENSE file, see <https://github.com/3DCP-TUe/DropletDetective>.
-%}
+% SPDX-License-Identifier: GPL-3.0-or-later
+% Droplet Detective
+% Project: https://github.com/3DCP-TUe/DropletDetective
+%
+% Copyright (c) 2024-2026 Eindhoven University of Technology
+%
+% Authors:
+%   - Derk Bos (2024-2026)
+%
+% For license details, see the LICENSE file in the project root.
 
-%%
+%% Clear
 clear all; close all; clc
 
 %% File locations and settings

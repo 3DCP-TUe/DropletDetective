@@ -1,3 +1,15 @@
+% SPDX-License-Identifier: GPL-3.0-or-later
+% Droplet Detective
+% Project: https://github.com/3DCP-TUe/DropletDetective
+%
+% Copyright (c) 2024-2026 Eindhoven University of Technology
+%
+% Authors:
+%   - Derk Bos (2024-2026)
+%
+% For license details, see the LICENSE file in the project root.
+
+%% Clear
 clear all; close all; clc;
 
 %Optionally give the main folder to analyse. If not specified, the folder
